@@ -18,7 +18,7 @@ def getDb():
         db.close()
 
 
-@router.post("/patient")
+@router.post("/patient", tags=["patient"])
 async def createPatientAsync(
     patient: PatientRequestModel, db: AsyncSession = Depends(getDb)
 ) -> PatientResponseModel:
@@ -26,7 +26,7 @@ async def createPatientAsync(
     return newPatient
 
 
-@router.post("/token")
+@router.post("/token", tags=["auth"])
 async def loginForAccessToken(
     formData: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(getDb)
 ) -> Token:
@@ -38,7 +38,7 @@ async def loginForAccessToken(
     return {"access_token": token, "token_type": "bearer"}
 
 
-@router.get("/patient/{patientId}")
+@router.get("/patient/{patientId}", tags=["patient"])
 async def getPatientAsync(
     patientId: int, db: AsyncSession = Depends(getDb)
 ) -> PatientResponseModel:
@@ -46,7 +46,7 @@ async def getPatientAsync(
     return patient
 
 
-@router.get("/patient")
+@router.get("/patient", tags=["patient"])
 async def getAllPatientAsync(
     db: AsyncSession = Depends(getDb),
 ) -> list[PatientResponseModel]:
@@ -54,7 +54,7 @@ async def getAllPatientAsync(
     return patients
 
 
-@router.put("/patient/{patientId}")
+@router.put("/patient/{patientId}", tags=["patient"])
 async def updatePatientAsync(
     patientId: int, newPatient: PatientRequestModel, db: AsyncSession = Depends(getDb)
 ) -> PatientResponseModel:
@@ -62,7 +62,7 @@ async def updatePatientAsync(
     return patient
 
 
-@router.delete("/patient/{patientId}")
+@router.delete("/patient/{patientId}", tags=["patient"])
 async def deletePatientAsync(patientId: int, db: AsyncSession = Depends(getDb)):
     patient = await deletePatient(patientId, db)
     return patient

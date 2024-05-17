@@ -15,7 +15,7 @@ def getDb():
         db.close()
 
 
-@router.post("/appointment")
+@router.post("/appointment", tags=["appointment"])
 async def createAppointmentAsync(
     appointment: AppointmentRequestModel, db: AsyncSession = Depends(getDb)
 ) -> AppointmentResponseModel:
@@ -23,7 +23,7 @@ async def createAppointmentAsync(
     return newAppointment
 
 
-@router.get("/appointment/{patientId}")
+@router.get("/appointment/{patientId}", tags=["appointment"])
 async def getAllAppointmentAccPatientAsync(
     patientId: int, db: AsyncSession = Depends(getDb)
 ) -> list[AppointmentResponseModel]:
@@ -31,7 +31,7 @@ async def getAllAppointmentAccPatientAsync(
     return appointment
 
 
-@router.post("/prescription/{appointmentId}")
+@router.post("/prescription/{appointmentId}", tags=["appointment"])
 async def createPrescriptionAsync(
     appointmentId: int,
     prescription: PrescriptionRequestModel,
