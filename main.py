@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from config.database import engine, Base, SessionLocal
+from config.database import async_engine as engine, Base, SessionLocal
 from routes.patientRoutes import router as patientRoutes
 from routes.appointmentRoutes import router as appointmentRoutes
 from routes.adminRoutes import router as adminRoutes
