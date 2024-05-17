@@ -2,7 +2,10 @@ from fastapi import Depends, APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 from config.database import SessionLocal
 from schemas.patientSchemas import *
+from schemas.authSchemas import *
 from controllers.patientControllers import *
+from fastapi.security import OAuth2PasswordRequestForm
+from config.auth import createAccessToken
 
 router = APIRouter()
 
@@ -23,12 +26,16 @@ async def createPatientAsync(
     return newPatient
 
 
-@router.post("/authenticatePatient")
-async def autheticatePatientAsync(
-    patient: PatientAuthModel, db: AsyncSession = Depends(getDb)
-) -> PatientResponseModel:
-    patient = await authenticatePatient(patient, db)
-    return patient
+@router.post("/token")
+async def loginForAccessToken(
+    formData: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(getDb)
+) -> Token:
+    patient = await authenticatePatient(formData.username, formData.password, db)
+    if not patient:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+
+    token = createAccessToken({"sub": patient.Email, "id": patient.Id})
+    return {"access_token": token, "token_type": "bearer"}
 
 
 @router.get("/patient/{patientId}")

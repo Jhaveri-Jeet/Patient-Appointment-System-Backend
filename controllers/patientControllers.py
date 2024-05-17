@@ -3,7 +3,9 @@ from schemas.patientSchemas import *
 from config.models import Patient
 from sqlalchemy.future import select
 from fastapi import HTTPException
-import bcrypt
+from passlib.context import CryptContext
+
+password = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 async def createPatient(patient: PatientRequestModel, db: AsyncSession):
@@ -13,13 +15,12 @@ async def createPatient(patient: PatientRequestModel, db: AsyncSession):
     if emailCheck is not None:
         raise HTTPException(status_code=400, detail="Email already exists")
 
-    hashed_password = bcrypt.hashpw(patient.Password.encode("utf-8"), bcrypt.gensalt())
-
+    hashed_password = password.hash(patient.Password)
     newPatient = Patient(
         Name=patient.Name,
         Mobile=patient.Mobile,
         Email=patient.Email,
-        Password=hashed_password.decode("utf-8"),
+        Password=hashed_password,
         Address=patient.Address,
         Gender=patient.Gender,
     )
@@ -29,15 +30,13 @@ async def createPatient(patient: PatientRequestModel, db: AsyncSession):
     return newPatient
 
 
-async def authenticatePatient(patient: PatientAuthModel, db: AsyncSession):
-    result = await db.execute(select(Patient).filter(Patient.Email == patient.Email))
+async def authenticatePatient(email: str, patientPassword: str, db: AsyncSession):
+    result = await db.execute(select(Patient).filter(Patient.Email == email))
     authPatient = result.scalars().first()
     if authPatient is None:
         raise HTTPException(status_code=401, detail="Invalid email")
 
-    if not bcrypt.checkpw(
-        patient.Password.encode("utf-8"), authPatient.Password.encode("utf-8")
-    ):
+    if not password.verify(patientPassword, authPatient.Password):
         raise HTTPException(status_code=401, detail="Invalid password")
 
     return authPatient
@@ -67,12 +66,12 @@ async def updatePatient(id: int, newPatient: PatientRequestModel, db: AsyncSessi
     if patient is None:
         raise HTTPException(status_code=404, detail="Patient not found")
 
-    hashed_password = bcrypt.hashpw(newPatient.Password.encode("utf-8"), bcrypt.gensalt())
+    hashed_password = password.hash(newPatient.Password)
 
     patient.Name = newPatient.Name
     patient.Mobile = newPatient.Mobile
     patient.Email = newPatient.Email
-    patient.Password = hashed_password.decode("utf-8"),
+    patient.Password = hashed_password
     patient.Address = newPatient.Address
     patient.Gender = newPatient.Gender
     await db.commit()
