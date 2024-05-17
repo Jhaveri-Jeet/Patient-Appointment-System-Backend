@@ -1,8 +1,9 @@
 from fastapi import FastAPI
-from config.database import engine, Base
+from config.database import engine, Base, SessionLocal
 from routes.patientRoutes import router as patientRoutes
 from routes.appointmentRoutes import router as appointmentRoutes
 from routes.adminRoutes import router as adminRoutes
+from controllers.adminControllers import createDefaultUser
 import contextlib
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -11,6 +12,8 @@ from fastapi.middleware.cors import CORSMiddleware
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+    async with SessionLocal() as db:
+        await createDefaultUser(db)
     yield
 
 

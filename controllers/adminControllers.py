@@ -31,3 +31,15 @@ async def updateAdmin(admin: AdminRequestModel, db: AsyncSession):
     await db.commit()
     await db.refresh(adminCheck)
     return adminCheck
+
+
+async def createDefaultUser(db: AsyncSession):
+    result = await db.execute(select(Admin).filter(Admin.Username == "admin"))
+    admin_exists = result.scalars().first()
+
+    if admin_exists is None:
+        hashed_password = passwordHash.hash("admin")
+        default_admin = Admin(Username="admin", HashPassword=hashed_password)
+        db.add(default_admin)
+        await db.commit()
+        await db.refresh(default_admin)
