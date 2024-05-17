@@ -24,7 +24,7 @@ async def createAppointmentAsync(
 
 
 @router.get("/appointment/{patientId}")
-async def getAppointmentAsync(
+async def getAllAppointmentAccPatientAsync(
     patientId: int, db: AsyncSession = Depends(getDb)
 ) -> list[AppointmentResponseModel]:
     appointment = await getAllAppointmentAccPatient(patientId, db)
