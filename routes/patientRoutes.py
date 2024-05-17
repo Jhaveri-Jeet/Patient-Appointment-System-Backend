@@ -33,14 +33,16 @@ async def autheticatePatientAsync(
 
 @router.get("/patient/{patientId}")
 async def getPatientAsync(
-    patientId, db: AsyncSession = Depends(getDb)
+    patientId: int, db: AsyncSession = Depends(getDb)
 ) -> PatientResponseModel:
     patient = await getPatient(patientId, db)
     return patient
 
 
 @router.get("/patient")
-async def getAllPatientAsync(db: AsyncSession = Depends(getDb)):
+async def getAllPatientAsync(
+    db: AsyncSession = Depends(getDb),
+) -> list[PatientResponseModel]:
     patients = await getAllPatient(db)
     return patients
 

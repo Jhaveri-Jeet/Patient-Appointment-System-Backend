@@ -43,7 +43,7 @@ async def authenticatePatient(patient: PatientAuthModel, db: AsyncSession):
     return authPatient
 
 
-async def getPatient(id: int, db: AsyncSession) -> list[PatientResponseModel]:
+async def getPatient(id: int, db: AsyncSession):
     result = await db.execute(select(Patient).filter(Patient.Id == id))
     patient = result.scalars().first()
     if patient is None:

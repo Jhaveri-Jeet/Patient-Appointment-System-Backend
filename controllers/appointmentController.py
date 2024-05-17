@@ -24,3 +24,14 @@ async def createAppointment(appointment: AppointmentRequestModel, db: AsyncSessi
     await db.refresh(newAppointment)
 
     return newAppointment
+
+
+async def getAllAppointmentAccPatient(patientId: int, db: AsyncSession):
+    result = await db.execute(
+        select(Appointment).filter(Appointment.PatientId == patientId)
+    )
+    appointments = result.scalars().all()
+    if appointments is None:
+        raise HTTPException(status_code=404, detail="Appointments not found")
+
+    return appointments

@@ -21,3 +21,11 @@ async def createAppointmentAsync(
 ) -> AppointmentResponseModel:
     newAppointment = await createAppointment(appointment, db)
     return newAppointment
+
+
+@router.get("/appointment/{patientId}")
+async def getAppointmentAsync(
+    patientId: int, db: AsyncSession = Depends(getDb)
+) -> list[AppointmentResponseModel]:
+    appointment = await getAllAppointmentAccPatient(patientId, db)
+    return appointment
