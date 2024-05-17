@@ -6,7 +6,7 @@ class Token(BaseModel):
     token_type: str
 
 
-class AdminModel(BaseModel):
+class AdminRequestModel(BaseModel):
     Username: str
     HashPassword: str
 

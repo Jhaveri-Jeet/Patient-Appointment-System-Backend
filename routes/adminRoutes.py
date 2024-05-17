@@ -27,3 +27,9 @@ async def loginForAccessToken(
 
     token = createAccessToken({"sub": admin.Username, "id": admin.Id})
     return {"access_token": token, "token_type": "bearer"}
+
+
+@router.put("/admin", tags=["admin"])
+async def updateAdminAsync(admin: AdminRequestModel, db: AsyncSession = Depends(getDb)):
+    updatedAdmin = await updateAdmin(admin, db)
+    return updatedAdmin
