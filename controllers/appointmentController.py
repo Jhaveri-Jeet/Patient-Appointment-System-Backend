@@ -35,3 +35,20 @@ async def getAllAppointmentAccPatient(patientId: int, db: AsyncSession):
         raise HTTPException(status_code=404, detail="Appointments not found")
 
     return appointments
+
+
+async def createPrescription(
+    appoinmentId: int, prescription: PrescriptionRequestModel, db: AsyncSession
+):
+    result = await db.execute(
+        select(Appointment).filter(Appointment.Id == appoinmentId)
+    )
+    appointmentCheck = result.scalars().first()
+    if appointmentCheck is None:
+        raise HTTPException(status_code=400, detail="Appointment not found")
+
+    appointmentCheck.Prescription = prescription.Prescription
+    await db.commit()
+    await db.refresh(appointmentCheck)
+
+    return appointmentCheck

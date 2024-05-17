@@ -61,18 +61,20 @@ async def getAllPatient(db: AsyncSession):
     return patients
 
 
-async def updatePatient(id: int, oldPatient: PatientRequestModel, db: AsyncSession):
+async def updatePatient(id: int, newPatient: PatientRequestModel, db: AsyncSession):
     result = await db.execute(select(Patient).filter(Patient.Id == id))
     patient = result.scalars().first()
     if patient is None:
         raise HTTPException(status_code=404, detail="Patient not found")
 
-    patient.Name = oldPatient.Name
-    patient.Mobile = oldPatient.Mobile
-    patient.Email = oldPatient.Email
-    patient.Password = oldPatient.Password
-    patient.Address = oldPatient.Address
-    patient.Gender = oldPatient.Gender
+    hashed_password = bcrypt.hashpw(newPatient.Password.encode("utf-8"), bcrypt.gensalt())
+
+    patient.Name = newPatient.Name
+    patient.Mobile = newPatient.Mobile
+    patient.Email = newPatient.Email
+    patient.Password = hashed_password.decode("utf-8"),
+    patient.Address = newPatient.Address
+    patient.Gender = newPatient.Gender
     await db.commit()
     await db.refresh(patient)
     return patient

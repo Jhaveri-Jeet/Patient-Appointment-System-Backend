@@ -15,7 +15,15 @@ class AppointmentResponseModel(BaseModel):
     Id: int
     Problem: str
     Date: date
-    PatientId: int
+    Prescription: str | None
+    PatientId: int 
+
+    class Config:
+        orm_mode = True
+
+
+class PrescriptionRequestModel(BaseModel):
+    Prescription: str
 
     class Config:
         orm_mode = True

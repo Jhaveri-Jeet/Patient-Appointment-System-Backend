@@ -31,6 +31,7 @@ class Appointment(Base):
     Id = Column(Integer, primary_key=True)
     Problem = Column(String(255), nullable=False)
     Date = Column(Date, nullable=False)
+    Prescription = Column(String(255), default=None)
     PatientId = Column(Integer, ForeignKey("Patients.Id"), nullable=False)
 
     patient = relationship("Patient", back_populates="appointments")

@@ -29,3 +29,13 @@ async def getAllAppointmentAccPatientAsync(
 ) -> list[AppointmentResponseModel]:
     appointment = await getAllAppointmentAccPatient(patientId, db)
     return appointment
+
+
+@router.post("/prescription/{appointmentId}")
+async def createPrescriptionAsync(
+    appointmentId: int,
+    prescription: PrescriptionRequestModel,
+    db: AsyncSession = Depends(getDb),
+) -> AppointmentResponseModel:
+    newPrescription = await createPrescription(appointmentId, prescription, db)
+    return newPrescription
