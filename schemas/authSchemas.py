@@ -9,6 +9,9 @@ class Token(BaseModel):
 class AdminRequestModel(BaseModel):
     Username: str
     HashPassword: str
+    Email: str
+    Address: str
+    Degree: str
 
     class Config:
         orm_mode = True

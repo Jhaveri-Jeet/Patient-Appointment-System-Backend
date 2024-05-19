@@ -23,6 +23,7 @@ async def createPatient(patient: PatientRequestModel, db: AsyncSession):
         Password=hashed_password,
         Address=patient.Address,
         Gender=patient.Gender,
+        BloodGroup=patient.BloodGroup,
     )
     db.add(newPatient)
     await db.commit()
@@ -74,6 +75,7 @@ async def updatePatient(id: int, newPatient: PatientRequestModel, db: AsyncSessi
     patient.Password = hashed_password
     patient.Address = newPatient.Address
     patient.Gender = newPatient.Gender
+    patient.BloodGroup = newPatient.BloodGroup
     await db.commit()
     await db.refresh(patient)
     return patient

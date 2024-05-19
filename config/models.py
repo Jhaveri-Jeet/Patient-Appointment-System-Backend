@@ -9,6 +9,30 @@ class Admin(Base):
     Id = Column(Integer, primary_key=True)
     Username = Column(String(255), nullable=False)
     HashPassword = Column(String(255), nullable=False)
+    Email = Column(String(255), nullable=True)
+    Address = Column(String(255), nullable=True)
+    Degree = Column(String(255), nullable=True)
+
+
+class Slots(Base):
+    __tablename__ = "Slots"
+
+    Id = Column(Integer, primary_key=True)
+    Time = Column(String(255), nullable=False)
+    Status = Column(String(255), nullable=False, default="Available")
+
+    appointments = relationship("Appointment", back_populates="slot")
+
+
+# class Service(Base):
+#     __tablename__ = "Services"
+
+#     Id = Column(Integer, primary_key=True)
+#     Name = Column(String(255), nullable=False)
+#     Description = Column(String(255), nullable=False)
+#     Price = Column(Integer, nullable=False)
+
+#     appointments = relationship("Appointment", back_populates="service")
 
 
 class Patient(Base):
@@ -21,6 +45,7 @@ class Patient(Base):
     Password = Column(String(255), nullable=False)
     Address = Column(String(255), nullable=False)
     Gender = Column(String(255), nullable=False)
+    BloodGroup = Column(String(255), nullable=False)
 
     appointments = relationship("Appointment", back_populates="patient")
 
@@ -33,5 +58,9 @@ class Appointment(Base):
     Date = Column(Date, nullable=False)
     Prescription = Column(String(255), default=None)
     PatientId = Column(Integer, ForeignKey("Patients.Id"), nullable=False)
+    # ServiceId = Column(Integer, ForeignKey("Services.Id"), nullable=False)
+    # SlotId = Column(Integer, ForeignKey("Slots.Id"), nullable=False)
 
     patient = relationship("Patient", back_populates="appointments")
+    # service = relationship("Service", back_populates="appointments")
+    # slot = relationship("Slots", back_populates="appointments")

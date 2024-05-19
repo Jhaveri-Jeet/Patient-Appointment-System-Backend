@@ -28,6 +28,9 @@ async def updateAdmin(admin: AdminRequestModel, db: AsyncSession):
 
     adminCheck.Username = admin.Username
     adminCheck.HashPassword = passwordHash.hash(admin.HashPassword)
+    adminCheck.Email = admin.Email
+    adminCheck.Address = admin.Address
+    adminCheck.Degree = admin.Degree
     await db.commit()
     await db.refresh(adminCheck)
     return adminCheck

@@ -8,6 +8,7 @@ class PatientRequestModel(BaseModel):
     Password: str
     Address: str
     Gender: str
+    BloodGroup: str
 
     class Config:
         orm_mode: True
@@ -21,6 +22,7 @@ class PatientResponseModel(BaseModel):
     Password: str
     Address: str
     Gender: str
+    BloodGroup: str
 
     class Config:
         orm_mode: True
