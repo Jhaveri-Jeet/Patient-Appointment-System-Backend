@@ -1,18 +1,35 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from schemas.appointmentSchemas import *
-from config.models import Appointment, Patient
+from config.models import Appointment, Patient, Slot, Service
 from sqlalchemy.future import select
 from fastapi import HTTPException
 
 
 async def createAppointment(appointment: AppointmentRequestModel, db: AsyncSession):
-    result = await db.execute(
+    # Exsisting Patient Check
+    patientResult = await db.execute(
         select(Patient).filter(Patient.Id == appointment.PatientId)
     )
+    patientCheck = patientResult.scalars().first()
 
-    patientCheck = result.scalars().first()
     if patientCheck is None:
         raise HTTPException(status_code=400, detail="Patient not found")
+
+    # Exsisting Slot Check
+    slotResult = await db.execute(select(Slot).filter(Slot.Id == appointment.SlotId))
+    slotCheck = slotResult.scalars().first()
+
+    if slotCheck is None:
+        raise HTTPException(status_code=400, detail="Slot not found")
+
+    # Exsisting Service Check
+    serviceResult = await db.execute(
+        select(Service).filter(Service.Id == appointment.ServiceId)
+    )
+    serviceCheck = serviceResult.scalars().first()
+
+    if serviceCheck is None:
+        raise HTTPException(status_code=400, detail="Service not found")
 
     newAppointment = Appointment(
         Problem=appointment.Problem,

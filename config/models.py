@@ -14,7 +14,7 @@ class Admin(Base):
     Degree = Column(String(255), nullable=True)
 
 
-class Slots(Base):
+class Slot(Base):
     __tablename__ = "Slots"
 
     Id = Column(Integer, primary_key=True)
@@ -58,9 +58,9 @@ class Appointment(Base):
     Date = Column(Date, nullable=False)
     Prescription = Column(String(255), default=None)
     PatientId = Column(Integer, ForeignKey("Patients.Id"), nullable=False)
-    # ServiceId = Column(Integer, ForeignKey("Services.Id"), nullable=False)
-    # SlotId = Column(Integer, ForeignKey("Slots.Id"), nullable=False)
+    ServiceId = Column(Integer, ForeignKey("Services.Id"), nullable=False)
+    SlotId = Column(Integer, ForeignKey("Slots.Id"), nullable=False)
 
     patient = relationship("Patient", back_populates="appointments")
-    # service = relationship("Service", back_populates="appointments")
-    # slot = relationship("Slots", back_populates="appointments")
+    service = relationship("Service", back_populates="appointments")
+    slot = relationship("Slots", back_populates="appointments")
