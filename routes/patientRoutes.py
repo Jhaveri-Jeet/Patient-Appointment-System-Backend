@@ -4,8 +4,6 @@ from config.database import SessionLocal
 from schemas.patientSchemas import *
 from schemas.authSchemas import *
 from controllers.patientControllers import *
-from fastapi.security import OAuth2PasswordRequestForm
-from config.auth import createAccessToken
 
 router = APIRouter()
 
@@ -24,18 +22,6 @@ async def createPatientAsync(
 ) -> PatientResponseModel:
     newPatient = await createPatient(patient, db)
     return newPatient
-
-
-@router.post("/token", tags=["auth"])
-async def loginForAccessToken(
-    formData: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(getDb)
-) -> Token:
-    patient = await authenticatePatient(formData.username, formData.password, db)
-    if not patient:
-        raise HTTPException(status_code=401, detail="Invalid email or password")
-
-    token = createAccessToken({"sub": patient.Email, "id": patient.Id})
-    return {"access_token": token, "token_type": "bearer"}
 
 
 @router.get("/patient/{patientId}", tags=["patient"])

@@ -21,7 +21,6 @@ class Patient(Base):
     Name = Column(String(255), nullable=False)
     Mobile = Column(String(255), nullable=False)
     Email = Column(String(255), unique=True, nullable=False)
-    Password = Column(String(255), nullable=False)
     Address = Column(String(255), nullable=False)
     Gender = Column(String(255), nullable=False)
     BloodGroup = Column(String(255), nullable=False)

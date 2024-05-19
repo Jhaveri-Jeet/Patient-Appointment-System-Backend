@@ -31,18 +31,6 @@ async def createPatient(patient: PatientRequestModel, db: AsyncSession):
     return newPatient
 
 
-async def authenticatePatient(email: str, patientPassword: str, db: AsyncSession):
-    result = await db.execute(select(Patient).filter(Patient.Email == email))
-    authPatient = result.scalars().first()
-    if authPatient is None:
-        raise HTTPException(status_code=401, detail="Invalid email")
-
-    if not password.verify(patientPassword, authPatient.Password):
-        raise HTTPException(status_code=401, detail="Invalid password")
-
-    return authPatient
-
-
 async def getPatient(id: int, db: AsyncSession):
     result = await db.execute(select(Patient).filter(Patient.Id == id))
     patient = result.scalars().first()
