@@ -34,7 +34,7 @@ async def getAllServiceAsync(
 
 @router.get("/service/{serviceId}", tags=["service"])
 async def getServiceAsync(
-    serviceId: int, db: AsyncSession = Depends(getDb())
+    serviceId: int, db: AsyncSession = Depends(getDb)
 ) -> ServiceResponseModel:
     service = await getService(serviceId, db)
     return service

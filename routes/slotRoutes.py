@@ -18,7 +18,7 @@ def getDb():
 
 @router.post("/slot", tags=["slot"])
 async def createSlotAsync(
-    slot: SlotRequestModel, db: AsyncSession = Depends(getDb())
+    slot: SlotRequestModel, db: AsyncSession = Depends(getDb)
 ) -> SlotResponseModel:
     newSlot = await createSlot(slot, db)
     return newSlot
@@ -26,7 +26,7 @@ async def createSlotAsync(
 
 @router.get("/slot", tags=["slot"])
 async def getAllSlotAsync(
-    db: AsyncSession = Depends(getDb()),
+    db: AsyncSession = Depends(getDb),
 ) -> list[SlotResponseModel]:
     slots = await getAllSlots(db)
     return slots
@@ -34,7 +34,7 @@ async def getAllSlotAsync(
 
 @router.get("/slot/{slotId}", tags=["slot"])
 async def getSlotAsync(
-    slotId: int, db: AsyncSession = Depends(getDb())
+    slotId: int, db: AsyncSession = Depends(getDb)
 ) -> SlotResponseModel:
     slot = await getSlot(slotId, db)
     return slot
@@ -42,13 +42,13 @@ async def getSlotAsync(
 
 @router.put("/slot/{slotId}", tags=["slot"])
 async def updateSlotAsync(
-    slotId: int, updatedSlot: SlotRequestModel, db: AsyncSession = Depends(getDb())
+    slotId: int, updatedSlot: SlotRequestModel, db: AsyncSession = Depends(getDb)
 ) -> SlotResponseModel:
     slot = await updateSlot(slotId, updatedSlot, db)
     return slot
 
 
 @router.delete("/slot/{slotId}", tags=["slot"])
-async def deleteSlotAsync(slotId: int, db: AsyncSession = Depends(getDb())):
+async def deleteSlotAsync(slotId: int, db: AsyncSession = Depends(getDb)):
     slot = await deleteSlot(slotId, db)
     return slot
