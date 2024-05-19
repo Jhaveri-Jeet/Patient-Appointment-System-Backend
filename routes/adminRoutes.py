@@ -29,7 +29,9 @@ async def loginForAccessToken(
     return {"access_token": token, "token_type": "bearer"}
 
 
-@router.put("/admin", tags=["admin"])
-async def updateAdminAsync(admin: AdminRequestModel, db: AsyncSession = Depends(getDb)):
-    updatedAdmin = await updateAdmin(admin, db)
+@router.put("/admin/{adminId}", tags=["admin"])
+async def updateAdminAsync(
+    adminId: int, admin: AdminRequestModel, db: AsyncSession = Depends(getDb)
+):
+    updatedAdmin = await updateAdmin(adminId, admin, db)
     return updatedAdmin

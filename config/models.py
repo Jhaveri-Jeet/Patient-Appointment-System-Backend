@@ -63,4 +63,4 @@ class Appointment(Base):
 
     patient = relationship("Patient", back_populates="appointments")
     service = relationship("Service", back_populates="appointments")
-    slot = relationship("Slots", back_populates="appointments")
+    slot = relationship("Slot", back_populates="appointments")

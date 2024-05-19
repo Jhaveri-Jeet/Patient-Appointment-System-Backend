@@ -20,8 +20,8 @@ async def authenticateAdmin(username: str, password: str, db: AsyncSession):
     return authAdmin
 
 
-async def updateAdmin(admin: AdminRequestModel, db: AsyncSession):
-    result = await db.execute(select(Admin).filter(Admin.Username == admin.Username))
+async def updateAdmin(id: int, admin: AdminRequestModel, db: AsyncSession):
+    result = await db.execute(select(Admin).filter(Admin.Id == id))
     adminCheck = result.scalars().first()
     if adminCheck is None:
         raise HTTPException(status_code=400, detail="Admin not found")

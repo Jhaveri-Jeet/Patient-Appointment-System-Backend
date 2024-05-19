@@ -35,6 +35,8 @@ async def createAppointment(appointment: AppointmentRequestModel, db: AsyncSessi
         Problem=appointment.Problem,
         Date=appointment.Date,
         PatientId=appointment.PatientId,
+        ServiceId=appointment.ServiceId,
+        SlotId=appointment.SlotId,
     )
     db.add(newAppointment)
     await db.commit()

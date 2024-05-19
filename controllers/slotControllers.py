@@ -51,7 +51,6 @@ async def deleteSlot(id: int, db: AsyncSession):
     if slot is None:
         raise HTTPException(status_code=404, detail="Slot not found")
 
-    db.delete(slot)
+    await db.delete(slot)
     await db.commit()
-    await db.refresh()
     return {"message": "Slot deleted successfully"}

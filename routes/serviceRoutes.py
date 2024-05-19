@@ -20,7 +20,7 @@ def getDb():
 async def createServiceAsync(
     service: ServiceRequestModel, db: AsyncSession = Depends(getDb)
 ) -> ServiceResponseModel:
-    newService = await createServiceAsync(service, db)
+    newService = await createService(service, db)
     return newService
 
 
@@ -50,7 +50,7 @@ async def updateServiceAsync(
     return service
 
 
-@router.delete("/service", tags=["service"])
+@router.delete("/service/{serviceId}", tags=["service"])
 async def deleteSerivceAsync(serviceId: int, db: AsyncSession = Depends(getDb)):
     service = await deleteService(serviceId, db)
     return service

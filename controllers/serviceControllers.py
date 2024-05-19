@@ -50,6 +50,6 @@ async def deleteService(id: int, db: AsyncSession):
     service = result.scalars().first()
     if service is None:
         raise HTTPException(status_code=404, detail="Service not found")
-    db.delete(service)
+    await db.delete(service)
     await db.commit()
     return {"message": "Service deleted successfully"}
