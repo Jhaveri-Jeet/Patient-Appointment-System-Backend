@@ -3,6 +3,8 @@ from config.database import async_engine as engine, Base, SessionLocal
 from routes.patientRoutes import router as patientRoutes
 from routes.appointmentRoutes import router as appointmentRoutes
 from routes.adminRoutes import router as adminRoutes
+from routes.slotRoutes import router as slotRoutes
+from routes.serviceRoutes import router as serviceRoutes
 from controllers.adminControllers import createDefaultUser
 import contextlib
 from fastapi.middleware.cors import CORSMiddleware
@@ -32,3 +34,5 @@ app.add_middleware(
 app.include_router(patientRoutes)
 app.include_router(appointmentRoutes)
 app.include_router(adminRoutes)
+app.include_router(slotRoutes)
+app.include_router(serviceRoutes)

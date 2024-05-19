@@ -24,15 +24,15 @@ class Slots(Base):
     appointments = relationship("Appointment", back_populates="slot")
 
 
-# class Service(Base):
-#     __tablename__ = "Services"
+class Service(Base):
+    __tablename__ = "Services"
 
-#     Id = Column(Integer, primary_key=True)
-#     Name = Column(String(255), nullable=False)
-#     Description = Column(String(255), nullable=False)
-#     Price = Column(Integer, nullable=False)
+    Id = Column(Integer, primary_key=True)
+    Name = Column(String(255), nullable=False)
+    Description = Column(String(255), nullable=False)
+    Price = Column(Integer, nullable=False)
 
-#     appointments = relationship("Appointment", back_populates="service")
+    appointments = relationship("Appointment", back_populates="service")
 
 
 class Patient(Base):
