@@ -3,9 +3,6 @@ from schemas.patientSchemas import *
 from config.models import Patient
 from sqlalchemy.future import select
 from fastapi import HTTPException
-from passlib.context import CryptContext
-
-password = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 async def createPatient(patient: PatientRequestModel, db: AsyncSession):
@@ -15,12 +12,10 @@ async def createPatient(patient: PatientRequestModel, db: AsyncSession):
     if emailCheck is not None:
         raise HTTPException(status_code=400, detail="Email already exists")
 
-    hashed_password = password.hash(patient.Password)
     newPatient = Patient(
         Name=patient.Name,
         Mobile=patient.Mobile,
         Email=patient.Email,
-        Password=hashed_password,
         Address=patient.Address,
         Gender=patient.Gender,
         BloodGroup=patient.BloodGroup,
@@ -55,12 +50,9 @@ async def updatePatient(id: int, newPatient: PatientRequestModel, db: AsyncSessi
     if patient is None:
         raise HTTPException(status_code=404, detail="Patient not found")
 
-    hashed_password = password.hash(newPatient.Password)
-
     patient.Name = newPatient.Name
     patient.Mobile = newPatient.Mobile
     patient.Email = newPatient.Email
-    patient.Password = hashed_password
     patient.Address = newPatient.Address
     patient.Gender = newPatient.Gender
     patient.BloodGroup = newPatient.BloodGroup

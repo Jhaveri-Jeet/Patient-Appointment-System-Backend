@@ -59,10 +59,6 @@ async def getAllAppointment(db: AsyncSession):
 
     result = await db.execute(smt)
     appointments = result.scalars().all()
-
-    if not appointments:
-        raise HTTPException(status_code=404, detail="Appointments not found")
-
     return appointments
 
 
