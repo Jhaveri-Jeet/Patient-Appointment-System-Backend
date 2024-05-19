@@ -90,3 +90,9 @@ async def deletePatient(id: int, db: AsyncSession):
     await db.delete(patient)
     await db.commit()
     return {"message": "Patient deleted successfully"}
+
+
+async def totalPatients(db: AsyncSession):
+    result = await db.execute(select(Patient))
+    patients = result.scalars().all()
+    return len(patients)

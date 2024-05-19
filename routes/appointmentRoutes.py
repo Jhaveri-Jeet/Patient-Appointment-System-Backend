@@ -31,6 +31,14 @@ async def getAllAppointmentAccPatientAsync(
     return appointment
 
 
+@router.get("/appointment", tags=["appointment"])
+async def getAllAppointmentAsync(
+    db: AsyncSession = Depends(getDb),
+) -> list[AppointmentResponseModel]:
+    appointment = await getAllAppointment(db)
+    return appointment
+
+
 @router.post("/prescription/{appointmentId}", tags=["appointment"])
 async def createPrescriptionAsync(
     appointmentId: int,
@@ -39,3 +47,9 @@ async def createPrescriptionAsync(
 ) -> AppointmentResponseModel:
     newPrescription = await createPrescription(appointmentId, prescription, db)
     return newPrescription
+
+
+@router.get("/totalTodaysAppointment", tags=["appointment"])
+async def totalTodaysAppointmentAsync(db: AsyncSession = Depends(getDb)):
+    total = await totalTodaysAppointment(db)
+    return total

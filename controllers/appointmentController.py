@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 from schemas.appointmentSchemas import *
 from config.models import Appointment, Patient, Slot, Service
@@ -45,6 +46,14 @@ async def createAppointment(appointment: AppointmentRequestModel, db: AsyncSessi
     return newAppointment
 
 
+async def getAllAppointment(db: AsyncSession):
+    result = await db.execute(select(Appointment))
+    appointments = result.scalars().all()
+    if appointments is None:
+        raise HTTPException(status_code=404, detail="Appointments not found")
+    return appointments
+
+
 async def getAllAppointmentAccPatient(patientId: int, db: AsyncSession):
     result = await db.execute(
         select(Appointment).filter(Appointment.PatientId == patientId)
@@ -71,3 +80,14 @@ async def createPrescription(
     await db.refresh(appointmentCheck)
 
     return appointmentCheck
+
+
+async def totalTodaysAppointment(db: AsyncSession):
+    result = await db.execute(
+        select(Appointment).filter(Appointment.Date == datetime.now().date())
+    )
+    appointments = result.scalars().all()
+    if appointments is None:
+        raise HTTPException(status_code=404, detail="Appointments not found")
+
+    return len(appointments)

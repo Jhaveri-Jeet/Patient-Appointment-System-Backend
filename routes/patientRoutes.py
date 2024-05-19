@@ -66,3 +66,9 @@ async def updatePatientAsync(
 async def deletePatientAsync(patientId: int, db: AsyncSession = Depends(getDb)):
     patient = await deletePatient(patientId, db)
     return patient
+
+
+@router.get("/totalPatients", tags=["patient"])
+async def totalPatientsAsync(db: AsyncSession = Depends(getDb)):
+    total = await totalPatients(db)
+    return total
