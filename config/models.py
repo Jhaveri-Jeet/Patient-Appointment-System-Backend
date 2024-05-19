@@ -57,6 +57,7 @@ class Appointment(Base):
     Problem = Column(String(255), nullable=False)
     Date = Column(Date, nullable=False)
     Prescription = Column(String(255), default=None)
+    Status = Column(String(255), default="Pending")
     PatientId = Column(Integer, ForeignKey("Patients.Id"), nullable=False)
     ServiceId = Column(Integer, ForeignKey("Services.Id"), nullable=False)
     SlotId = Column(Integer, ForeignKey("Slots.Id"), nullable=False)

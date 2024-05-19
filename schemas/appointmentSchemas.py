@@ -18,6 +18,7 @@ class AppointmentResponseModel(BaseModel):
     Problem: str
     Date: date
     Prescription: str | None
+    Status: str | None
     PatientId: int
     ServiceId: int
     SlotId: int
@@ -28,6 +29,7 @@ class AppointmentResponseModel(BaseModel):
 
 class PrescriptionRequestModel(BaseModel):
     Prescription: str
+    Status: str | None = None
 
     class Config:
         orm_mode = True

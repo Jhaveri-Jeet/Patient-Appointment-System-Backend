@@ -14,7 +14,12 @@ try:
 except OperationalError as e:
     print(f"Error: {e}")
 
-async_engine = create_async_engine(ASYNC_DATABASE_URL, echo=True)
+async_engine = create_async_engine(
+    ASYNC_DATABASE_URL,
+    echo=True,
+    pool_size=20,
+    max_overflow=10,
+)
 
 SessionLocal = sessionmaker(
     autocommit=False,

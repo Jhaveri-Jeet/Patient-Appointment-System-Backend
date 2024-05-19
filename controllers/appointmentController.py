@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from schemas.appointmentSchemas import *
 from config.models import Appointment, Patient, Slot, Service
 from sqlalchemy.future import select
+from sqlalchemy.orm import joinedload
 from fastapi import HTTPException
 
 
@@ -47,7 +48,35 @@ async def createAppointment(appointment: AppointmentRequestModel, db: AsyncSessi
 
 
 async def getAllAppointment(db: AsyncSession):
-    result = await db.execute(select(Appointment))
+    smt = (
+        select(Appointment)
+        .options(joinedload(Appointment.patient))
+        .options(joinedload(Appointment.service))
+        .options(joinedload(Appointment.slot))
+        .filter(Appointment.Status == "Pending")
+        .order_by(Appointment.Id.desc())
+    )
+
+    result = await db.execute(smt)
+    appointments = result.scalars().all()
+
+    if not appointments:
+        raise HTTPException(status_code=404, detail="Appointments not found")
+
+    return appointments
+
+
+async def getAllTodaysAppointment(db: AsyncSession):
+    result = await db.execute(
+        select(Appointment)
+        .options(joinedload(Appointment.patient))
+        .options(joinedload(Appointment.service))
+        .options(joinedload(Appointment.slot))
+        .filter(
+            Appointment.Date == datetime.now().date(), Appointment.Status == "Pending"
+        )
+        .order_by(Appointment.Id.desc())
+    )
     appointments = result.scalars().all()
     if appointments is None:
         raise HTTPException(status_code=404, detail="Appointments not found")
@@ -56,7 +85,12 @@ async def getAllAppointment(db: AsyncSession):
 
 async def getAllAppointmentAccPatient(patientId: int, db: AsyncSession):
     result = await db.execute(
-        select(Appointment).filter(Appointment.PatientId == patientId)
+        select(Appointment)
+        .options(joinedload(Appointment.patient))
+        .options(joinedload(Appointment.service))
+        .options(joinedload(Appointment.slot))
+        .filter(Appointment.PatientId == patientId)
+        .order_by(Appointment.Id.desc())
     )
     appointments = result.scalars().all()
     if appointments is None:
@@ -76,15 +110,16 @@ async def createPrescription(
         raise HTTPException(status_code=400, detail="Appointment not found")
 
     appointmentCheck.Prescription = prescription.Prescription
+    appointmentCheck.Status = "Completed"
     await db.commit()
     await db.refresh(appointmentCheck)
 
     return appointmentCheck
 
 
-async def totalTodaysAppointment(db: AsyncSession):
+async def totalPendingAppointment(db: AsyncSession):
     result = await db.execute(
-        select(Appointment).filter(Appointment.Date == datetime.now().date())
+        select(Appointment).filter(Appointment.Status == "Pending")
     )
     appointments = result.scalars().all()
     if appointments is None:
