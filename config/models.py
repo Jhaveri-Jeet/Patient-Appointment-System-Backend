@@ -14,27 +14,6 @@ class Admin(Base):
     Degree = Column(String(255), nullable=True)
 
 
-class Slot(Base):
-    __tablename__ = "Slots"
-
-    Id = Column(Integer, primary_key=True)
-    Time = Column(String(255), nullable=False)
-    Status = Column(String(255), nullable=False, default="Available")
-
-    appointments = relationship("Appointment", back_populates="slot")
-
-
-class Service(Base):
-    __tablename__ = "Services"
-
-    Id = Column(Integer, primary_key=True)
-    Name = Column(String(255), nullable=False)
-    Description = Column(String(255), nullable=False)
-    Price = Column(Integer, nullable=False)
-
-    appointments = relationship("Appointment", back_populates="service")
-
-
 class Patient(Base):
     __tablename__ = "Patients"
 
@@ -48,6 +27,27 @@ class Patient(Base):
     BloodGroup = Column(String(255), nullable=False)
 
     appointments = relationship("Appointment", back_populates="patient")
+
+
+class Service(Base):
+    __tablename__ = "Services"
+
+    Id = Column(Integer, primary_key=True)
+    Name = Column(String(255), nullable=False)
+    Description = Column(String(255), nullable=False)
+    Price = Column(Integer, nullable=False)
+
+    appointments = relationship("Appointment", back_populates="service")
+
+
+class Slot(Base):
+    __tablename__ = "Slots"
+
+    Id = Column(Integer, primary_key=True)
+    Time = Column(String(255), nullable=False)
+    Status = Column(String(255), nullable=False, default="Available")
+
+    appointments = relationship("Appointment", back_populates="slot")
 
 
 class Appointment(Base):
