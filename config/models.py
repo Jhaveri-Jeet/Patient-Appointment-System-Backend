@@ -9,6 +9,7 @@ class Admin(Base):
     Id = Column(Integer, primary_key=True)
     Username = Column(String(255), nullable=False)
     HashPassword = Column(String(255), nullable=False)
+    FullName = Column(String(255), nullable=True)
     Email = Column(String(255), nullable=True)
     Address = Column(String(255), nullable=True)
     Degree = Column(String(255), nullable=True)

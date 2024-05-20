@@ -34,3 +34,9 @@ async def updateAdminAsync(
 ):
     updatedAdmin = await updateAdmin(adminId, admin, db)
     return updatedAdmin
+
+
+@router.get("/admin", tags=["admin"])
+async def getAdminAsync(db: AsyncSession = Depends(getDb)) -> AdminResponseModel:
+    admin = await getAdmin(db)
+    return admin
