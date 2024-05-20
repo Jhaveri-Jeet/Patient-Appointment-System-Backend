@@ -78,6 +78,13 @@ Once the server is up and running, you can interact with the API endpoints to pe
 - Username: admin
 - Password: admin
 
+# Testing Card Credentials
+
+For testing payments, use the following default card credentials:
+
+- Card Number: 4000003560000008
+- Region: India
+
 ## Frontend
 
 For the frontend of this project, please visit [Patient-Appointment-System-Admin](https://github.com/Jhaveri-Jeet/Patient-Appointment-System-Admin). This repository contains the user interface components and details on how it interacts with the backend.
