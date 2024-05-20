@@ -5,7 +5,7 @@ from routes.appointmentRoutes import router as appointmentRoutes
 from routes.adminRoutes import router as adminRoutes
 from routes.slotRoutes import router as slotRoutes
 from routes.serviceRoutes import router as serviceRoutes
-from controllers.adminControllers import createDefaultSlots, createDefaultUser
+from controllers.adminControllers import createDefaultUser
 import contextlib
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -16,7 +16,6 @@ async def lifespan(app: FastAPI):
         await conn.run_sync(Base.metadata.create_all)
     async with SessionLocal() as db:
         await createDefaultUser(db)
-        await createDefaultSlots(db)
     yield
 
 

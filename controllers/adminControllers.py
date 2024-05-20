@@ -54,33 +54,3 @@ async def createDefaultUser(db: AsyncSession):
         db.add(default_admin)
         await db.commit()
         await db.refresh(default_admin)
-
-
-async def createDefaultSlots(db: AsyncSession):
-    start_time = datetime.strptime("09:30 AM", "%I:%M %p")
-    end_time = datetime.strptime("09:30 PM", "%I:%M %p")
-    lunch_start = datetime.strptime("12:30 PM", "%I:%M %p")
-    lunch_end = lunch_start + timedelta(hours=3)
-
-    current_time = start_time
-    while current_time < lunch_start:
-        slot = Slot(
-            Time=current_time.strftime("%I:%M %p")
-            + " to "
-            + (current_time + timedelta(hours=1)).strftime("%I:%M %p")
-        )
-        db.add(slot)
-        current_time += timedelta(hours=1)
-
-    current_time = lunch_end
-
-    while current_time < end_time:
-        slot = Slot(
-            Time=current_time.strftime("%I:%M %p")
-            + " to "
-            + (current_time + timedelta(hours=1)).strftime("%I:%M %p")
-        )
-        db.add(slot)
-        current_time += timedelta(hours=1)
-
-    await db.commit()
