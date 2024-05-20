@@ -7,7 +7,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 from fastapi import HTTPException
 
-stripe.api_key = "sk_test_51PIYScSDipm0nQRDWJeTlXVFx5xrQaybOKWGkk8Q0kppDp5lt5M4OQ5snsb2pmgcQQOkeO1AcdZGfoADb4xecI7W00PtCzxR3q"
+stripe.api_key = "Enter_Your_API_Key"
 
 
 async def createAppointment(appointment: AppointmentRequestModel, db: AsyncSession):
