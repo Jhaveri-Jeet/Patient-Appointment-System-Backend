@@ -17,8 +17,8 @@ except OperationalError as e:
 async_engine = create_async_engine(
     ASYNC_DATABASE_URL,
     echo=True,
-    pool_size=20,
-    max_overflow=10,
+    pool_size=100,
+    max_overflow=100,
 )
 
 SessionLocal = sessionmaker(
