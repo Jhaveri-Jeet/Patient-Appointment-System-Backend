@@ -33,3 +33,10 @@ class PrescriptionRequestModel(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class PaymentLinkRequestModel(BaseModel):
+    Amount: int
+    Currency: str = "usd"
+    ServiceName: str
+    ServiceDescription: str

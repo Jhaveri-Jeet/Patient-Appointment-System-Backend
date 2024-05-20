@@ -61,3 +61,9 @@ async def createPrescriptionAsync(
 async def totalPendingAppointmentAsync(db: AsyncSession = Depends(getDb)):
     total = await totalPendingAppointment(db)
     return total
+
+
+@router.post("/createPaymentLink", tags=["appointment"])
+async def createPaymentLinkAsync(payment: PaymentLinkRequestModel):
+    paymentLink = await create_payment_link_for_appointment(payment)
+    return paymentLink

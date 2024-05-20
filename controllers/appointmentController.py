@@ -1,10 +1,13 @@
 from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
+import stripe
 from schemas.appointmentSchemas import *
 from config.models import Appointment, Patient, Slot, Service
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 from fastapi import HTTPException
+
+stripe.api_key = "sk_test_51PIYScSDipm0nQRDWJeTlXVFx5xrQaybOKWGkk8Q0kppDp5lt5M4OQ5snsb2pmgcQQOkeO1AcdZGfoADb4xecI7W00PtCzxR3q"
 
 
 async def createAppointment(appointment: AppointmentRequestModel, db: AsyncSession):
@@ -122,3 +125,43 @@ async def totalPendingAppointment(db: AsyncSession):
         raise HTTPException(status_code=404, detail="Appointments not found")
 
     return len(appointments)
+
+
+async def create_product(name: str, description: str):
+    try:
+        product = stripe.Product.create(name=name, description=description)
+        return product
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def create_price(product_id: str, amount: int, currency: str):
+    try:
+        price = stripe.Price.create(
+            currency=currency, product=product_id, unit_amount=amount
+        )
+        return price
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def create_payment_link(price_id: str):
+    try:
+        payment_link = stripe.PaymentLink.create(
+            line_items=[{"price": price_id, "quantity": 1}]
+        )
+        return payment_link
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def create_payment_link_for_appointment(payment: PaymentLinkRequestModel):
+    try:
+        product = await create_product(
+            f"Payment for Service {payment.ServiceName}", payment.ServiceDescription
+        )
+        price = await create_price(product.id, payment.Amount, payment.Currency)
+        payment_link = await create_payment_link(price.id)
+        return {"url": payment_link.url}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
