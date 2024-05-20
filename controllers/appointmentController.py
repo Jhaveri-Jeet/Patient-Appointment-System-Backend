@@ -127,9 +127,11 @@ async def totalPendingAppointment(db: AsyncSession):
     return len(appointments)
 
 
-async def create_product(name: str, description: str):
+async def create_product():
     try:
-        product = stripe.Product.create(name=name, description=description)
+        product = stripe.Product.create(
+            name="Checkup", description="This are the charges for the service."
+        )
         return product
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -148,7 +150,13 @@ async def create_price(product_id: str, amount: int, currency: str):
 async def create_payment_link(price_id: str):
     try:
         payment_link = stripe.PaymentLink.create(
-            line_items=[{"price": price_id, "quantity": 1}]
+            line_items=[{"price": price_id, "quantity": 1}],
+            after_completion={
+                "type": "redirect",
+                "redirect": {
+                    "url": "http://localhost:5173/Appointments"  # Change this to your frontend success page
+                },
+            },
         )
         return payment_link
     except Exception as e:
@@ -157,9 +165,7 @@ async def create_payment_link(price_id: str):
 
 async def create_payment_link_for_appointment(payment: PaymentLinkRequestModel):
     try:
-        product = await create_product(
-            f"Payment for Service {payment.ServiceName}", payment.ServiceDescription
-        )
+        product = await create_product()
         price = await create_price(product.id, payment.Amount, payment.Currency)
         payment_link = await create_payment_link(price.id)
         return {"url": payment_link.url}

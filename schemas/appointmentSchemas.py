@@ -38,5 +38,3 @@ class PrescriptionRequestModel(BaseModel):
 class PaymentLinkRequestModel(BaseModel):
     Amount: int
     Currency: str = "usd"
-    ServiceName: str
-    ServiceDescription: str
