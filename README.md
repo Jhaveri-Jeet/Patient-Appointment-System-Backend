@@ -82,7 +82,7 @@ Once the server is up and running, you can interact with the API endpoints to pe
 
 For testing payments, use the following default card credentials:
 
-- Card Number: 4000003560000008
+- Card Number: 4000 0035 6000 0008
 - Region: India
 
 ## Frontend
