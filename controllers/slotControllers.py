@@ -8,7 +8,7 @@ from fastapi import HTTPException
 async def createSlot(slot: SlotRequestModel, db: AsyncSession):
     newSlot = Slot(
         Time=slot.Time,
-        Status=slot.Status,
+        Status="Available",
     )
     db.add(newSlot)
     await db.commit()

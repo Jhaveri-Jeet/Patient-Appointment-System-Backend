@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 class SlotRequestModel(BaseModel):
     Time: str
-    Status: str
+    Status: str | None = None
 
     class Config:
         orm_mode = True
