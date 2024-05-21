@@ -2,7 +2,9 @@
 
 Check out the video below for a full demonstration of the system's features:
 
-[![Watch the video](./Patient%20Appointment%20System.mp4)](./Patient%20Appointment%20System.mp4)
+<video width="600" controls>
+  <source src="./Patient%20Appointment%20System.mp4" type="video/mp4">
+</video>
 
 ## Overview
 
